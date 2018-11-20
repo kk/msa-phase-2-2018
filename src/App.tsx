@@ -25,6 +25,7 @@ interface IState {
 	memes: any[],
 	open: boolean,
 	uploadFileList: any,
+	uploadedBase64: any,
 }
 
 
@@ -37,15 +38,17 @@ class App extends React.Component<{}, IState> {
 			currentMeme: {"id":0, "title":"Loading ","url":"","tags":"⚆ _ ⚆","uploaded":"","width":"0","height":"0"},
 			memes: [],
 			open: false,
-			uploadFileList: null
+			uploadFileList: null,
+			uploadedBase64: ""
 		}     	
+
 		this.changeAudio = this.changeAudio.bind(this)
 		this.selectNewMeme = this.selectNewMeme.bind(this)
 		this.fetchMemes = this.fetchMemes.bind(this)
 		this.fetchMemes("")	
 		this.handleFileUpload = this.handleFileUpload.bind(this)
-		this.uploadMeme = this.uploadMeme.bind(this)
-
+		this.uploadAudio = this.uploadAudio.bind(this)
+		this.getBase64 = this.getBase64.bind(this)
 	}
 
 	public render() {
@@ -65,7 +68,7 @@ class App extends React.Component<{}, IState> {
 
 				</div>
 				<div className="container header">
-					<div className="btn btn-primary btn-action btn-add" onClick={this.onOpenModal}>Add Meme</div>
+					<div className="btn btn-primary btn-action btn-add" onClick={this.onOpenModal}>Add Audio</div>
 					{/*<div className="btn btn-primary btn-action btn-add" onClick={this.printAudio}>print title</div>*/}
 
 				</div>
@@ -85,74 +88,29 @@ class App extends React.Component<{}, IState> {
 			<Modal open={open} onClose={this.onCloseModal}>
 				<form>
 					<div className="form-group">
-						<label>Meme Title</label>
-						<input type="text" className="form-control" id="meme-title-input" placeholder="Enter Title" />
-						<small className="form-text text-muted">You can edit any meme later</small>
+						<label>Audio Title</label>
+						<input type="text" className="form-control" id="title-input" placeholder="Enter Title" />
 					</div>
 					<div className="form-group">
 						<label>Tag</label>
-						<input type="text" className="form-control" id="meme-tag-input" placeholder="Enter Tag" />
-						<small className="form-text text-muted">Tag is used for search</small>
+						<input type="text" className="form-control" id="tag-input" placeholder="Enter Tag" />
 					</div>
 					<div className="form-group">
-						<label>Image</label>
-						<input type="file" onChange={this.handleFileUpload} className="form-control-file" id="meme-image-input" />
+						<label>Audio File</label>
+						<input type="file" onChange={this.handleFileUpload} className="form-control-file" id="audio-file-input" />
 					</div>
 
-					<button type="button" className="btn" onClick={this.uploadMeme}>Upload</button>
+					<button type="button" className="btn" onClick={this.uploadAudio}>Upload</button>
 				</form>
 			</Modal>
 			{/*
 			<h1 style={{ textAlign: "center" }}> {this.state.audio.title + "🎵"} </h1>
 			<h3 style={{ textAlign: "center" }}> {this.state.audio.tag} </h3>
 			*/}
-			<div id={"mainBody"}>
-			<Paper className={"root"} style={{height:"10%", marginRight:"50%", marginTop:"10%"}}>
-			<Grid container={true} spacing={16}>
-			  <Grid item={true}>
-				<ButtonBase className={"audio"} /*style={{paddingTop:"50px"}}*/>
-				<audio controls={true} /*style={{paddingTop:"10%"}}*/>
-							{/* <source src="http://puu.sh/C4d9s/5634f362c7.wav" type="audio/wav"/> */}
-							<source src="http://puu.sh/C4d9s/5634f362c7.wav" type="audio/wav"/>
-
-							Your browser does not support the audio tag.
-				</audio>				</ButtonBase>
-			  </Grid>
-			  <Grid item={true} xs={12} sm={true} container={true}>
-				<Grid item={true} xs={true} container={true} direction="column" spacing={16}>
-				  <Grid item={true} xs={true}>
-					<Typography gutterBottom={true} variant="subtitle1">
-						{this.state.audio.title + "🎵"} 
-					</Typography>
-					<Typography gutterBottom={true}>
-						{this.state.audio.tag}
-					</Typography>
-					<Typography color="textSecondary">ID: {this.state.audio.id}</Typography>
-				  </Grid>
-				  <Grid item={true}>
-					<Typography style={{ cursor: 'pointer' }}>Author: me irl</Typography>
-				  </Grid>
-				</Grid>
-				{/*
-				<Grid item={true}>
-				  <Typography variant="subtitle1">$19.00</Typography>
-				</Grid>
-				*/}
-			  </Grid>
-			</Grid>
-		  </Paper>
-
-    <div className={"audioList"}>
-      <List>
-        <ListItem>
-          <ListItemText primary={this.state.audio.title} secondary="Jan 9, 2014" />
-        </ListItem>
-      </List>
-    </div>
-		</div>
 
 
-		<Grid item={true} xs={12}>
+
+		<Grid item={true} xs={12} style={{paddingTop:"10%"}}>
           <Grid container={true} className={"columns"} justify="center" spacing={8}>
             {[0].map(value => (
               <Grid key={value} item={true}>
@@ -174,7 +132,9 @@ class App extends React.Component<{}, IState> {
 				<Grid item={true} xs={true} container={true} direction="column" spacing={16}>
 				  <Grid item={true} xs={true}>
 					<Typography gutterBottom={true} variant="subtitle1">
+					<b>
 						{this.state.audio.title + "🎵"} 
+					</b>
 					</Typography>
 					<Typography gutterBottom={true}>
 						{this.state.audio.tag}
@@ -300,10 +260,47 @@ class App extends React.Component<{}, IState> {
 			uploadFileList: fileList.target.files
 		})
 	}
+/*
+	private getBase64(file: any) {
+    const reader:FileReader = new FileReader();
+    reader.onload = (readerEvt: any) => {
+      const binaryString = readerEvt.target.result;
+      let base64Url = binaryString;
+			base64Url = base64Url.substring(base64Url.lastIndexOf("base64") + 7);
+			return base64Url
+	}
+	*/
+	private getBase64(file: any) {
+		
+		const fileReader: FileReader = new FileReader();
+		
+		fileReader.addEventListener("load", (e) => {
+			this.setState({ uploadedBase64: fileReader.result });
+		});
 
-	private uploadMeme() {
-		const titleInput = document.getElementById("meme-title-input") as HTMLInputElement
-		const tagInput = document.getElementById("meme-tag-input") as HTMLInputElement
+/*
+	fileReader.onload = (e) => {
+		this.setState({ uploadedBase64: fileReader.result });
+	}
+	*/
+	 fileReader.readAsDataURL(file);
+
+	 console.log(this.state.uploadedBase64.split(',')[1])
+	 console.log(this.state.uploadedBase64.split(',')[1])
+	 return (this.state.uploadedBase64.split(',')[1]) 
+			/*
+				console.log(tjis.target.result)
+		})
+*/
+
+	}
+
+	private uploadAudio() {
+		const titleInput = document.getElementById("title-input") as HTMLInputElement
+		const tagInput = document.getElementById("tag-input") as HTMLInputElement
+		// const fileInput = document.getElementById("audio-file-input").files[0] as HTMLInputElement
+		const utc = new Date().toJSON().slice(0,10).replace(/-/g,'/');
+		
 		// const imageFile = this.state.uploadFileList[0]
 	
 		// if (titleInput === null || tagInput === null || imageFile === null) {
@@ -313,14 +310,33 @@ class App extends React.Component<{}, IState> {
 	
 		const title = titleInput.value
 		const tag = tagInput.value
+		console.log("title is: " + title)
+		console.log("tag is: " + tag)
+		console.log("date is: " + utc)
+		console.log("file is: " + this.state.uploadFileList[0].name)
+		console.log("file type is: " + this.state.uploadFileList[0].type)
+		console.log("modified date is: " + this.state.uploadFileList[0].lastModifiedDate)
+		const type = this.state.uploadFileList[0].type.substring(0,5)
+		console.log("type is: " + type)
+		if (type === "audio"){
+			console.log("hey this is a valid audio file!")
+			console.log("base 64 is")
+			const base64 = this.getBase64(this.state.uploadFileList[0])
+			console.log(base64)
+		}
+			// const reader = new FileReader();
+			// reader.readAsDataURL(this.state.uploadFileList[0]);
+			// console.log(reader.result);
+
+		}
 		// const timestamp = 
-		const url = "http://phase2apitest.azurewebsites.net/api/meme/upload"
+
+		// const url = "http://phase2apitest.azurewebsites.net/api/meme/upload"
 	
-		const formData = new FormData()
-		formData.append("Title", title)
-		formData.append("Tag", tag)
-		// formData.append("Timestamp", timestamp)
-	
+		// const formData = new FormData()
+		// formData.append("Title", title)
+		// formData.append("Tag", tag)
+		/*
 		fetch(url, {
 			body: formData,
 			headers: {'cache-control': 'no-cache'},
@@ -334,7 +350,9 @@ class App extends React.Component<{}, IState> {
 				location.reload()
 			}
 		})
+		
 	}
+	*/
 /*
 	private ComplexGrid(props:any) {
 		const { classes } = props;

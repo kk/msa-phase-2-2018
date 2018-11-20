@@ -29,6 +29,7 @@
     "src/setupTests.ts"
   ],
   "rules": {
-    "ordered-imports": false
+    "ordered-imports": false,
+    "only-arrow-functions": false
   }
 }
