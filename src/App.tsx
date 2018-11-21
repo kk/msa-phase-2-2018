@@ -1,5 +1,7 @@
 // import Button from '@material-ui/core/Button';
+import Button from '@material-ui/core/Button';
 import ButtonBase from '@material-ui/core/ButtonBase';
+
 // import { withStyles } from '@material-ui/core/styles';
 // import * as PropTypes from 'prop-types';
 
@@ -8,7 +10,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 
 import ListItemText from '@material-ui/core/ListItemText';
-
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import * as React from 'react';
 
 import Modal from 'react-responsive-modal';
@@ -28,6 +31,7 @@ interface IState {
 	audioList: any,
 	audioListGen: boolean,
 	currentMeme: any,
+	editOpen: boolean,
 	memes: any[],
 	open: boolean,
 	uploadFileList: any,
@@ -44,6 +48,7 @@ class App extends React.Component<{}, IState> {
 			audioList: ["blank"],
 			audioListGen: true,
 			currentMeme: {"id":0, "title":"Loading ","url":"","tags":"⚆ _ ⚆","uploaded":"","width":"0","height":"0"},
+			editOpen: false,
 			memes: [],
 			open: false,
 			uploadFileList: null,
@@ -59,6 +64,9 @@ class App extends React.Component<{}, IState> {
 		this.getAudioList = this.getAudioList.bind(this)
 		this.createTable = this.createTable.bind(this)
 		this.getBase64 = this.getBase64.bind(this)
+		this.deleteAudio = this.deleteAudio.bind(this)
+		this.editAudio = this.editAudio.bind(this)
+
 	}
 
 	public render() {
@@ -80,16 +88,17 @@ class App extends React.Component<{}, IState> {
 				audioListGen: false
 			})
 		}
-		const { open } = this.state;
+		const { open, editOpen } = this.state;
 		return (
 		<div>
 			<div className="header-wrapper">
 			Audiocat 🐱
 			<div className="container header" style={{marginRight:"50%"}}>
-					<div className="btn btn-primary btn-action btn-add" onClick={this.changeAudio}>Title change</div>
+					{/*<div className="btn btn-primary btn-action btn-add" onClick={this.changeAudio}>Title change</div>*/}
 					{/*<div className="btn btn-primary btn-action btn-add" onClick={this.printAudio}>print title</div>*/}
 
 				</div>
+				
 				<div className="container header">
 					<div className="btn btn-primary btn-action btn-add" onClick={this.onOpenModal}>Add Audio</div>
 					{/*<div className="btn btn-primary btn-action btn-add" onClick={this.printAudio}>print title</div>*/}
@@ -108,6 +117,28 @@ class App extends React.Component<{}, IState> {
 				</div>
 			</div>
 			*/}
+			
+				<Modal open={editOpen} onClose={this.onEditCloseModal}>
+				<form>
+					Modifying the audio file: {this.state.audio.title}
+					<br/>
+					<div className="form-group">
+						<b><label>Audio Title</label></b>
+						<input type="text" className="form-control" id="title-input" placeholder="Enter the new audio title" />
+					</div>
+					<div className="form-group">
+						<b><label>Tag</label></b>
+						<input type="text" className="form-control" id="tag-input" placeholder="Enter the new tag" />
+					</div>
+					<div className="form-group">
+						<label>Audio File</label>
+						<input type="file" onChange={this.handleFileUpload} className="form-control-file" id="audio-file-input" />
+					</div>
+
+					<button type="button" className="btn" onClick={this.editAudio}>Upload</button>
+				</form>
+			</Modal>
+
 			<Modal open={open} onClose={this.onCloseModal}>
 				<form>
 					<div className="form-group">
@@ -149,7 +180,8 @@ class App extends React.Component<{}, IState> {
 							<source src="http://puu.sh/C4d9s/5634f362c7.wav" type="audio/wav"/>
 
 							Your browser does not support the audio tag.
-				</audio>				</ButtonBase>
+				</audio>				
+				</ButtonBase>
 			  </Grid>
 			  <Grid item={true} xs={12} sm={true} container={true}>
 				<Grid item={true} xs={true} container={true} direction="column" spacing={16}>
@@ -167,6 +199,16 @@ class App extends React.Component<{}, IState> {
 				  <Grid item={true}>
 					<Typography style={{ cursor: 'pointer' }}>Author: me irl</Typography>
 				  </Grid>
+					<Grid item={true}>
+					<ButtonBase className={"audio"}>
+						<Button variant="contained" color="secondary" onClick={this.deleteAudio} style={{position:"relative", left:"0", bottom:"0"}}>
+						<DeleteIcon />
+						</Button>
+						<Button variant="contained" color="primary" onClick={this.onEditOpenModal} style={{position:"relative", left:"0", bottom:"0"}}>
+						<EditIcon />
+						</Button>
+						</ButtonBase>
+					</Grid>
 				</Grid>
 				{/*
 				<Grid item={true}>
@@ -206,14 +248,24 @@ class App extends React.Component<{}, IState> {
 	}
 
 	
-	// Modal open
+	// Add Modal open
 	private onOpenModal = () => {
 		this.setState({ open: true });
 	  };
 	
-	// Modal close
+	// Add Modal close
 	private onCloseModal = () => {
 		this.setState({ open: false });
+	};
+
+	// Edit modal open
+	private onEditOpenModal = () => {
+		this.setState({ editOpen: true });
+	  };
+	
+	// Edit modal close
+	private onEditCloseModal = () => {
+		this.setState({ editOpen: false });
 	};
 	
 	// Change selected meme
@@ -223,15 +275,6 @@ class App extends React.Component<{}, IState> {
 		})
 	}
 
-/*
-	private defaultAudio() {
-		fetch("http://audiocatapi.azurewebsites.net/api/audio/1").then(d => d.json())
-		.then(d => {
-			this.setState({
-				audio: d
-			})
-	})
-	}*/
 	private getAudioList() {
 		fetch("https://audiocatapi2c.azurewebsites.net/api/Audio").then(d => d.json())
 		.then(d => {
@@ -253,28 +296,68 @@ class App extends React.Component<{}, IState> {
 			})
 			console.log(this.state.audio)
 			
-	}
-)
-	}
-	
-	
-		
-		/*
-		const url = "http://audiocatapi.azurewebsites.net/api/audio/1"
-		fetch(url, {
-			method: 'GET'
 		})
-		.then(res => res.json())
-		.then(res => {
-			const audioItem = res[0]
-			if (audioItem === undefined) {
-				console.log("i found nuttin")
-			}
-			console.log("title is: " + audioItem)
-		});
-		
 	}
-	*/
+	private deleteAudio(){
+		const url = "https://audiocatapi2c.azurewebsites.net/api/audio/" + this.state.audio.id
+		fetch(url, {
+			// body: JSON.stringify(formData),
+			headers: {'cache-control': 'no-cache'},
+			method: 'DELETE'
+		})
+		.then((response : any) => {
+			if (!response.ok) {
+				// Error State
+				alert(response.statusText)
+			} else {
+				alert(this.state.audio.title + "has been removed")
+				location.reload()
+			}
+		})
+	}
+
+	private editAudio() {
+		const titleInput = document.getElementById("title-input") as HTMLInputElement
+		const tagInput = document.getElementById("tag-input") as HTMLInputElement
+		// const fileInput = document.getElementById("audio-file-input").files[0] as HTMLInputElement
+		const utc = new Date().toJSON().slice(0,10).replace(/-/g,'/');
+		// const audioFile = this.state.uploadFileList[0]
+		let title = ""
+		let tag = ""
+		 if (titleInput === null) {
+		    title = this.state.audio.title
+		 }
+		 else{
+         title = titleInput.value
+		 }
+		 if (tag === null) {
+			tag = this.state.audio.title
+	   }
+	   else{
+		  tag = tagInput.value
+		 }
+		 
+		const formData = {"id": this.state.audio.id, "title":  title , "tag": tag, "timestamp": utc.toString() }
+		console.log("title is: " + title)
+    console.log("the id isww: " + this.state.audio.id)
+		const url = "https://audiocatapi2c.azurewebsites.net/api/audio/" + this.state.audio.id
+		fetch(url, {
+			body: JSON.stringify(formData),
+			headers: {'cache-control': 'no-cache', 'content-type': 'application/json'},
+			method: 'PUT'
+		})
+		.then((response : any) => {
+			if (!response.ok) {
+				// Error State
+				alert(response.statusText)
+			} else {
+				location.reload()
+			}
+		})
+
+		}
+	
+	
 
 	private fetchMemes(tag: any) {
 		let url = "http://phase2apitest.azurewebsites.net/api/meme"
@@ -345,11 +428,12 @@ class App extends React.Component<{}, IState> {
 		// const audioFile = this.state.uploadFileList[0]
 			
 		 if (titleInput === null || tagInput === null) {
+			alert("Please fill out the fields")
 		 	return;
 		 }
 
 		if (this.state.uploadFileList === null) {
-			alert("there is no file")
+			alert("There is no file")
 			return;
 		}
 	
@@ -371,15 +455,27 @@ class App extends React.Component<{}, IState> {
 			console.log(base64)
 		}
 		*/
+		/*
 		const formData = new FormData()
 		formData.append("title", title.toString())
 		formData.append("tag", tag.toString())
 		formData.append("timestamp", utc.toString())
+		*/
 	 	// formData.append("timestamp", utc.toString())
+		// console.log("form data is:")
+		// console.log(formData)
+		
+		// const formData = '{"title": ' + title.toString() + ', "tag": ' + tag.toString() + ', "timestamp": ' + utc.toString() + '}'
+		const formData = {"title":  title , "tag": tag, "timestamp": utc.toString() }
+		// JSON.stringify(formData)
+		console.log("title is: " + title)
+		// const formData = '{"title": "js bois", "tag": "ok", "timestamp": "idk u"}'
 
-		fetch("https://audiocatapi2c.azurewebsites.net/api/audio", {
-			body: formData,
-			headers: {'cache-control': 'no-cache'},
+		// const formData = '{"title": ' + title.toString + ', "tag": "ok", "timestamp": "idk u"}'
+		const url = "https://audiocatapi2c.azurewebsites.net/api/audio"
+		fetch(url, {
+			body: JSON.stringify(formData),
+			headers: {'cache-control': 'no-cache', 'content-type': 'application/json'},
 			method: 'POST'
 		})
 		.then((response : any) => {
@@ -390,9 +486,6 @@ class App extends React.Component<{}, IState> {
 				location.reload()
 			}
 		})
-			// const reader = new FileReader();
-			// reader.readAsDataURL(this.state.uploadFileList[0]);
-			// console.log(reader.result);
 
 		}
 
@@ -405,8 +498,11 @@ class App extends React.Component<{}, IState> {
 					children.push(<td key={"id" + i}>{audio.id}</td>)
 					children.push(<td key={"name" + i}>{audio.title}</td>)
 					children.push(<td key={"tags" + i}>{audio.tag}</td>)
+					const currentAudio = {"id": audio.id, "title": audio.title , "tag": audio.tag, "timestamp": audio.timestamp}
 					// table.push(<tr key={i+""} id={i+""} onClick= {this.selectRow.bind(this, i)}>{children}</tr>)
-					table.push(<ListItem onClick={e => { console.log(audio.id) }}><tr key={i+""} id={i+""}><ListItemText primary={audio.title} secondary={audio.tag} /></tr></ListItem>)
+					// table.push(<ListItem onClick={e => { console.log(audio) }}><tr key={i+""} id={i+""}><ListItemText primary={audio.title} secondary={audio.tag} /></tr></ListItem>)
+					table.push(<ListItem onClick={e => {this.setState({audio: (currentAudio)}) }}><tr key={i+""} id={i+""}><ListItemText primary={audio.title} secondary={audio.tag }  /></tr></ListItem>)
+					
 					/*
 					<ListItem >
 									<ListItemText primary={this.state.audioList.length} secondary="Jan 9, 2014" />
@@ -416,70 +512,6 @@ class App extends React.Component<{}, IState> {
 			}
 			return table
 	}
-		// const timestamp = 
-
-		// const url = "http://phase2apitest.azurewebsites.net/api/meme/upload"
-	
-		// const formData = new FormData()
-		// formData.append("Title", title)
-		// formData.append("Tag", tag)
-		/*
-		fetch(url, {
-			body: formData,
-			headers: {'cache-control': 'no-cache'},
-			method: 'POST'
-		})
-		.then((response : any) => {
-			if (!response.ok) {
-				// Error State
-				alert(response.statusText)
-			} else {
-				location.reload()
-			}
-		})
-		
-	}
-	*/
-/*
-	private ComplexGrid(props:any) {
-		const { classes } = props;
-		return (
-		  <Paper className={classes.root}>
-			<Grid container={true} spacing={16}>
-			  <Grid item={true}>
-				<ButtonBase className={classes.image}>
-				  <img className={classes.img} alt="complex" src="/static/images/grid/complex.jpg" />
-				</ButtonBase>
-			  </Grid>
-			  <Grid item={true} xs={12} sm={true} container={true}>
-				<Grid item={true} xs={true} container={true} direction="column" spacing={16}>
-				  <Grid item={true} xs={true}>
-					<Typography gutterBottom={true} variant="subtitle1">
-					  Standard license
-					</Typography>
-					<Typography gutterBottom={true}>Full resolution 1920x1080 • JPEG</Typography>
-					<Typography color="textSecondary">ID: 1030114</Typography>
-				  </Grid>
-				  <Grid item={true}>
-					<Typography style={{ cursor: 'pointer' }}>Remove</Typography>
-				  </Grid>
-				</Grid>
-				<Grid item={true}>
-				  <Typography variant="subtitle1">$19.00</Typography>
-				</Grid>
-			  </Grid>
-			</Grid>
-		  </Paper>
-		);
-	  }
-	  /*
-	  ComplexGrid.propTypes = {
-		classes: PropTypes.object.isRequired,
-	  };
-	  
-	  export default withStyles(styles)(ComplexGrid);
-*/
-
 }
 
 export default App;
