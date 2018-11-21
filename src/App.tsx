@@ -1,8 +1,12 @@
+// import Button from '@material-ui/core/Button';
 import ButtonBase from '@material-ui/core/ButtonBase';
 // import { withStyles } from '@material-ui/core/styles';
 // import * as PropTypes from 'prop-types';
+
 import List from '@material-ui/core/List';
+
 import ListItem from '@material-ui/core/ListItem';
+
 import ListItemText from '@material-ui/core/ListItemText';
 
 import * as React from 'react';
@@ -21,6 +25,8 @@ import './App.css';
 
 interface IState {
 	audio: any,
+	audioList: any,
+	audioListGen: boolean,
 	currentMeme: any,
 	memes: any[],
 	open: boolean,
@@ -35,6 +41,8 @@ class App extends React.Component<{}, IState> {
         super(props)
         this.state = {
 			audio: {"id":-1, "title":"Loading title","tag":"Loading tags","timestamp":""},
+			audioList: ["blank"],
+			audioListGen: true,
 			currentMeme: {"id":0, "title":"Loading ","url":"","tags":"⚆ _ ⚆","uploaded":"","width":"0","height":"0"},
 			memes: [],
 			open: false,
@@ -48,6 +56,8 @@ class App extends React.Component<{}, IState> {
 		this.fetchMemes("")	
 		this.handleFileUpload = this.handleFileUpload.bind(this)
 		this.uploadAudio = this.uploadAudio.bind(this)
+		this.getAudioList = this.getAudioList.bind(this)
+		this.createTable = this.createTable.bind(this)
 		this.getBase64 = this.getBase64.bind(this)
 	}
 
@@ -57,6 +67,19 @@ class App extends React.Component<{}, IState> {
 			this.defaultAudio();
 		}*/
 		console.log("title is: " + this.state.audio.title)
+		console.log("audioList is: " + this.state.audioList)
+		/*
+		if (this.state.audioList === ["blank"]) {
+			console.log("i am runnin da function")
+			this.getAudioList()
+		}
+		*/
+		if (this.state.audioListGen === true) {
+			this.getAudioList()
+			this.setState({
+				audioListGen: false
+			})
+		}
 		const { open } = this.state;
 		return (
 		<div>
@@ -159,13 +182,21 @@ class App extends React.Component<{}, IState> {
             ))}
             {[1].map(value => (
               <Grid key={value} item={true}>
-                <Paper className={"audioList"}>
+                <Paper className={"audioList"} >
 								<List>
-									<ListItem>
-									<ListItemText primary={this.state.audio.title} secondary="Jan 9, 2014" />
+									{this.createTable()}
+{/*
+									<ListItem style={{ cursor: 'pointer' }}>
+										<ListItemText primary={this.state.audioList.length} secondary="Jan 9, 2014" />
 									</ListItem>
+
+									<ListItem style={{ cursor: 'pointer' }} >
+										<ListItemText primary={this.state.audioList.length} secondary="Jan 9, 2014" />
+									</ListItem>
+*/}
 								</List>
 								</Paper>
+								
               </Grid>
             ))}
           </Grid>
@@ -201,7 +232,17 @@ class App extends React.Component<{}, IState> {
 			})
 	})
 	}*/
-
+	private getAudioList() {
+		fetch("https://audiocatapi2c.azurewebsites.net/api/Audio").then(d => d.json())
+		.then(d => {
+			// console.log(d)
+			// d.title = "ayy lmao"
+			this.setState({
+				audioList: d
+			})
+			console.log(this.state.audioList)	
+		})
+	}
 	private changeAudio() {
 		fetch("http://audiocatapi.azurewebsites.net/api/audio/1").then(d => d.json())
 		.then(d => {
@@ -234,6 +275,7 @@ class App extends React.Component<{}, IState> {
 		
 	}
 	*/
+
 	private fetchMemes(tag: any) {
 		let url = "http://phase2apitest.azurewebsites.net/api/meme"
 		if (tag !== "") {
@@ -300,16 +342,20 @@ class App extends React.Component<{}, IState> {
 		const tagInput = document.getElementById("tag-input") as HTMLInputElement
 		// const fileInput = document.getElementById("audio-file-input").files[0] as HTMLInputElement
 		const utc = new Date().toJSON().slice(0,10).replace(/-/g,'/');
-		
-		// const imageFile = this.state.uploadFileList[0]
-	
-		// if (titleInput === null || tagInput === null || imageFile === null) {
-		// 	return;
-		// }
+		// const audioFile = this.state.uploadFileList[0]
+			
+		 if (titleInput === null || tagInput === null) {
+		 	return;
+		 }
 
+		if (this.state.uploadFileList === null) {
+			alert("there is no file")
+			return;
+		}
 	
 		const title = titleInput.value
 		const tag = tagInput.value
+		/*
 		console.log("title is: " + title)
 		console.log("tag is: " + tag)
 		console.log("date is: " + utc)
@@ -324,11 +370,52 @@ class App extends React.Component<{}, IState> {
 			const base64 = this.getBase64(this.state.uploadFileList[0])
 			console.log(base64)
 		}
+		*/
+		const formData = new FormData()
+		formData.append("title", title.toString())
+		formData.append("tag", tag.toString())
+		formData.append("timestamp", utc.toString())
+	 	// formData.append("timestamp", utc.toString())
+
+		fetch("https://audiocatapi2c.azurewebsites.net/api/audio", {
+			body: formData,
+			headers: {'cache-control': 'no-cache'},
+			method: 'POST'
+		})
+		.then((response : any) => {
+			if (!response.ok) {
+				// Error State
+				alert(response.statusText)
+			} else {
+				location.reload()
+			}
+		})
 			// const reader = new FileReader();
 			// reader.readAsDataURL(this.state.uploadFileList[0]);
 			// console.log(reader.result);
 
 		}
+
+		private createTable() {
+			const table:any[] = []
+			console.log(this.state.audioList.length)
+			for (let i = 0; i < this.state.audioList.length; i++) {
+					const children = []
+					const audio = this.state.audioList[i]
+					children.push(<td key={"id" + i}>{audio.id}</td>)
+					children.push(<td key={"name" + i}>{audio.title}</td>)
+					children.push(<td key={"tags" + i}>{audio.tag}</td>)
+					// table.push(<tr key={i+""} id={i+""} onClick= {this.selectRow.bind(this, i)}>{children}</tr>)
+					table.push(<ListItem onClick={e => { console.log(audio.id) }}><tr key={i+""} id={i+""}><ListItemText primary={audio.title} secondary={audio.tag} /></tr></ListItem>)
+					/*
+					<ListItem >
+									<ListItemText primary={this.state.audioList.length} secondary="Jan 9, 2014" />
+									</ListItem>
+									*/
+
+			}
+			return table
+	}
 		// const timestamp = 
 
 		// const url = "http://phase2apitest.azurewebsites.net/api/meme/upload"
