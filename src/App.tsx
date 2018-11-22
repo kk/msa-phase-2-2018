@@ -68,7 +68,8 @@ class App extends React.Component<{}, IState> {
 		this.uploadAudio = this.uploadAudio.bind(this)
 		this.getAudioList = this.getAudioList.bind(this)
 		this.createTable = this.createTable.bind(this)
-		this.getBase64 = this.getBase64.bind(this)
+		this.getBase64Edit = this.getBase64Edit.bind(this)
+		this.getBase64Upload = this.getBase64Upload.bind(this)
 		this.deleteAudio = this.deleteAudio.bind(this)
 		this.editAudio = this.editAudio.bind(this)
 		this.filterSearchList = this.filterSearchList.bind(this)
@@ -107,6 +108,9 @@ class App extends React.Component<{}, IState> {
           </Typography>
 		  <TextField id="search-input" placeholder="Search" style={{paddingLeft: "60%"}}/>							
 				<Button variant="contained" color="primary" onClick={this.filterSearchList} style={{position:"relative", left:"0", bottom:"0"}}>
+					<SearchIcon />
+				</Button>
+				<Button variant="contained" color="primary" onClick={ e => {console.log("uploaded base64 is: " + this.state.uploadedBase64)}} style={{position:"absolute", left:"0", bottom:"0"}}>
 					<SearchIcon />
 				</Button>
 			<div className="btn" onClick={this.searchQueryByVoice} ><i className="fa fa-microphone" /></div>
@@ -148,7 +152,7 @@ class App extends React.Component<{}, IState> {
 						<label>Author</label>
 						<input type="text" className="form-control-file" id="author-input" />
 					</div>
-					<button type="button" className="btn" onClick={this.editAudio}>Upload</button>
+					<button type="button" className="btn" onClick={this.getBase64Edit}>Upload</button>
 				</form>
 			</Modal>
 
@@ -171,7 +175,7 @@ class App extends React.Component<{}, IState> {
 						<input type="text" className="form-control-file" id="author-input" />
 					</div>
 
-					<button type="button" className="btn" onClick={this.uploadAudio}>Upload</button>
+					<button type="button" className="btn" onClick={this.getBase64Upload}>Upload</button>
 				</form>
 			</Modal>
 			{/*
@@ -362,6 +366,7 @@ class App extends React.Component<{}, IState> {
 		// const authorInput = document.getElementById("author-input") as HTMLInputElement
 		// const fileInput = document.getElementById("audio-file-input").files[0] as HTMLInputElement
 		const utc = new Date().toJSON().slice(0,10).replace(/-/g,'/');
+		console.log("from editAudio, base64 is: " + this.state.uploadedBase64.split(',')[1])
 		// const audioFile = this.state.uploadFileList[0]
 		let title = ""
 		let tag = ""
@@ -384,21 +389,18 @@ class App extends React.Component<{}, IState> {
 	   	 else{
 	     	author = authorInput.value
 		 }
+		 
 		 const type = this.state.uploadFileList[0].type.substring(0,5)
 		 console.log("type is: " + type)
 		 if (type === "audio"){
 			 console.log("hey this is a valid audio file!")
-			 console.log("base 64 is")
-			 this.getBase64(this.state.uploadFileList[0])
-			 console.log("uploaded base64 is")
-			 console.log(this.state.uploadedBase64)
 		 }
 		 else{
 			 alert("Please enter a valid audio file eg .wav")
 			 return
 		 }
 		 
-		const formData = {"id": this.state.audio.id, "title":  title , "tag": tag, "timestamp": utc.toString(), "file": this.state.uploadedBase64, "author": author }
+		const formData = {"id": this.state.audio.id, "title":  title , "tag": tag, "timestamp": utc.toString(), "file": this.state.uploadedBase64.split(',')[1], "author": author }
 		console.log("title is: " + title)
     	console.log("the id isww: " + this.state.audio.id)
 		const url = "https://audiocatapi2g.azurewebsites.net/api/audio/" + this.state.audio.id
@@ -457,39 +459,58 @@ class App extends React.Component<{}, IState> {
 	}
 	
 	*/
-	/*
-	 private getBase64(file: any) {
-		
+	
+	 private getBase64Edit() {
+		const file = this.state.uploadFileList[0]
 		const fileReader: FileReader = new FileReader();
 		
 		fileReader.addEventListener("load", (e) => {
 			this.setState({ uploadedBase64: fileReader.result });
-			// console.log("this should really change")
+			console.log("from getbase64 function, base64 is: " + fileReader.result)
+			{this.editAudio()}
 			// console.log(this.state.uploadedBase64)
-			return this.state.uploadedBase64
+			// return this.state.uploadedBase64
 		});
 
 	 fileReader.readAsDataURL(file);
-	 */
+}
+
+private getBase64Upload() {
+	const file = this.state.uploadFileList[0]
+	const fileReader: FileReader = new FileReader();
+	
+	fileReader.addEventListener("load", (e) => {
+		this.setState({ uploadedBase64: fileReader.result });
+		console.log("from getbase64 function, base64 is: " + fileReader.result)
+		{this.uploadAudio()}
+		// console.log(this.state.uploadedBase64)
+		// return this.state.uploadedBase64
+	});
+
+ fileReader.readAsDataURL(file);
+}
 	 // console.log(this.state.uploadedBase64.split(',')[1])
 	 /*
    console.log(fileReader.readAsDataURL(file))
 	 console.log(this.state.uploadedBase64.split(',')[1])
 	 return (this.state.uploadedBase64.split(',')[1]) 
 */
+/*
 	private getBase64(file: any) {
 		const reader = new FileReader();
     reader.readAsBinaryString(file);
 
 		reader.onload = (e) => {
 			const csv: string = (reader.result) as string;
-      return csv
+			console.log("getbase64 from function is: ")
+			console.log(csv)
+      		return csv
 		}
     reader.onerror = (e) => {
         alert("An error has occured with uploading")
     };
 	}
-
+*/
 /*
   private getBase64(file: any) {
 		const reader = new FileReader();
@@ -539,10 +560,6 @@ class App extends React.Component<{}, IState> {
 		console.log("type is: " + type)
 		if (type === "audio"){
 			console.log("hey this is a valid audio file!")
-			console.log("base 64 is")
-			this.getBase64(this.state.uploadFileList[0])
-			console.log("uploaded base64 is")
-			console.log(this.state.uploadedBase64)
 		}
 		else{
 			alert("Please enter a valid audio file eg .wav")
@@ -559,7 +576,7 @@ class App extends React.Component<{}, IState> {
 		// console.log(formData)
 		
 		// const formData = '{"title": ' + title.toString() + ', "tag": ' + tag.toString() + ', "timestamp": ' + utc.toString() + '}'
-		const formData = {"title":  title , "tag": tag, "timestamp": utc.toString(), "file": this.getBase64(this.state.uploadFileList[0]), "author": author}
+		const formData = {"title":  title , "tag": tag, "timestamp": utc.toString(), "file": this.state.uploadedBase64.split(',')[1], "author": author}
 		// JSON.stringify(formData)
 		console.log("title is: " + title)
 		// const formData = '{"title": "js bois", "tag": "ok", "timestamp": "idk u"}'
