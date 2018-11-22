@@ -26,3 +26,44 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+#outer-container {
+  width: 100%;
+  height: auto;
+  text-align: left;
+}
+#inner-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  height: 300px;
+}
+#video-overlay {
+  width: 100%;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  margin: 10px;
+  padding-top: 13%;
+  padding-left: 5%;
+  /*padding: 5px 5px;*/
+  font-size: 3.5em;
+  /* font-family: Helvetica; */
+  color: #FFF;
+  /*background-color: rgba(255, 165, 0, 0.3);*/
+}
+
+
+/*
+h1{
+  font-family: 'Raleway', sans-serif;
+  color: #ffffff;
+}
+*/
+/*
+#navbar{
+  position: fixed; 
+    top: 0; 
+    width: 100%; 
+}
+*/

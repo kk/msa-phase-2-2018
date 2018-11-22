@@ -101,24 +101,18 @@ class App extends React.Component<{}, IState> {
 		const { open, editOpen } = this.state;
 		return (
 		<div>
+			<div id="navbar">
 			     <AppBar position="static" color="default">
         <Toolbar>
           <Typography variant="h6" color="inherit">
-            Audiocat
+			<img src="/audiocat-logo.png" alt="Audiocat Logo" width="100px" height="100px"/>
           </Typography>
-		  <TextField id="search-input" placeholder="Search" style={{paddingLeft: "60%"}}/>							
-				<Button variant="contained" color="primary" onClick={this.filterSearchList} style={{position:"relative", left:"0", bottom:"0"}}>
-					<SearchIcon />
-				</Button>
-				<Button variant="contained" color="primary" onClick={ e => {console.log("uploaded base64 is: " + this.state.uploadedBase64)}} style={{position:"absolute", left:"0", bottom:"0"}}>
-					<SearchIcon />
-				</Button>
-			<div className="btn" onClick={this.searchQueryByVoice} ><i className="fa fa-microphone" /></div>
 
 		  <div className="btn btn-primary btn-action btn-add" onClick={this.onOpenModal}>Add Audio</div>
 
         </Toolbar>
       </AppBar>
+	  </div>
 			{/*
 			<div className="container">
 				<div className="row">
@@ -182,9 +176,49 @@ class App extends React.Component<{}, IState> {
 			<h1 style={{ textAlign: "center" }}> {this.state.audio.title + "🎵"} </h1>
 			<h3 style={{ textAlign: "center" }}> {this.state.audio.tag} </h3>
 			*/}
-
-
-
+{/*
+		      <Typography component="h2" variant="h1" gutterBottom={true}>
+        h1. Audiocat
+      </Typography>
+	  <Typography component="h3" variant="h3" gutterBottom={true}>
+        h2. The simple and free audio player
+      </Typography>
+	  {/*<div style={{width: "100%", height: "0px", position: "relative"}}><iframe src="https://streamable.com/s/kq0xg/fwu
+	  */
+}
+	  {/*
+	  <video controls={true} src="https://streamable.com/s/kq0xg/fwu"> 
+	  <source type="video/mp4" />
+	  </video>
+	  */}
+	  {/*
+	  <video autoPlay={true} muted={true} loop={true} id="myVideo" style={{width: "100%", height: "auto"}}>
+  		<source src="./keyboardcat.mp4" type="video/mp4"/>
+	  </video>
+	  */}
+	  <div id={"outer-container"}>
+		<div id={"inner-container"}>
+			<div id={"video-overlay"}>
+				<Typography component="h2" variant="h1" gutterBottom={true} style={{fontFamily: 'Raleway', color:" #ffffff", fontSize: "1.5em"}}>
+			<b>Audiocat</b>
+		</Typography>
+		<Typography component="h3" variant="h2" gutterBottom={true} style={{fontFamily: 'Raleway', color:" #ffffff", fontSize: "1em"}}>
+			The free audio sharing website
+		</Typography>
+		<br/>
+		<Typography component="h3" variant="h2" gutterBottom={true} style={{ color:" #ffffff", fontFamily: 'Helvetica', fontSize: "0.7em",
+		/*paddingLeft: "37%"*/ textAlign: "center"}}>
+		<div style={{color: "#ffa500"}}>
+			Get started! <br/>
+			<i className="fa fa-angle-double-down" style={{textAlign: "center"}}/>
+		</div>
+		</Typography>
+			</div>
+			<video id={"player"} autoPlay={true} muted={true} loop={true} style={{width: "100%", height: "auto"}}>
+			<source src="./keyboardcat.mp4" type="video/mp4"/>
+		</video>
+		</div>
+	</div>
 		<Grid item={true} xs={12} style={{paddingTop:"10%"}}>
           <Grid container={true} className={"columns"} justify="center" spacing={8}>
             {[0].map(value => (
@@ -229,6 +263,16 @@ class App extends React.Component<{}, IState> {
 						<EditIcon />
 						</Button>
 						</ButtonBase>
+						<br/>
+						<br/>
+
+			<div id="searchBar">
+			<TextField id="search-input" placeholder="Search"/>							
+				<Button variant="contained" color="primary" onClick={this.filterSearchList} style={{position:"relative", left:"0", bottom:"0"}}>
+				<SearchIcon />
+			</Button>
+			<div className="btn" onClick={this.searchQueryByVoice} ><i className="fa fa-microphone" /></div>
+		</div>
 					</Grid>
 				</Grid>
 				{/*
