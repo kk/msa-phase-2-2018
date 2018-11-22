@@ -23,7 +23,7 @@ import Modal from 'react-responsive-modal';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-
+import MediaStreamRecorder from 'msr';
 
 import './App.css';
 
@@ -72,6 +72,7 @@ class App extends React.Component<{}, IState> {
 		this.deleteAudio = this.deleteAudio.bind(this)
 		this.editAudio = this.editAudio.bind(this)
 		this.filterSearchList = this.filterSearchList.bind(this)
+		this.searchQueryByVoice = this.searchQueryByVoice.bind(this)
 
 	}
 
@@ -108,6 +109,8 @@ class App extends React.Component<{}, IState> {
 				<Button variant="contained" color="primary" onClick={this.filterSearchList} style={{position:"relative", left:"0", bottom:"0"}}>
 					<SearchIcon />
 				</Button>
+			<div className="btn" onClick={this.searchQueryByVoice} ><i className="fa fa-microphone" /></div>
+
 		  <div className="btn btn-primary btn-action btn-add" onClick={this.onOpenModal}>Add Audio</div>
 
         </Toolbar>
@@ -603,12 +606,67 @@ class App extends React.Component<{}, IState> {
 			}
 			return table
 	}
-/*
-	private refreshPlayer(){
-		const audioPlayer = document.getElementById("audio-player")
-		audioPlayer.load()
+
+	private searchQueryByVoice(){
+		const mediaConstraints = {
+			audio: true
+		}
+		const onMediaSuccess = (stream: any) => {
+			const mediaRecorder = new MediaStreamRecorder(stream);
+			mediaRecorder.mimeType = 'audio/wav'; // check this line for audio/wav
+			mediaRecorder.ondataavailable = (blob: any) => {
+				this.postAudio(blob);
+				mediaRecorder.stop()
+			}
+			mediaRecorder.start(3000);
+		}
+	
+		navigator.getUserMedia(mediaConstraints, onMediaSuccess, onMediaError)
+	
+		function onMediaError(e: any) {
+			console.error('media error', e);
+		}
 	}
-	*/
+
+	private postAudio(blob:any) {
+        let accessToken: any;
+        fetch('https://westus.api.cognitive.microsoft.com/sts/v1.0/issueToken', {
+            headers: {
+                'Content-Length': '0',
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Ocp-Apim-Subscription-Key': 'd540f77acd43487ea1cda63823d67cc9'
+            },
+            method: 'POST'
+        }).then((response) => {
+            // console.log(response.text())
+            return response.text()
+        }).then((response) => {
+            console.log(response)
+            accessToken = response
+        }).catch((error) => {
+            console.log("Error", error)
+        });
+            // posting audio
+    fetch('https://westus.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=en-US', {
+        body: blob, // this is a .wav audio file    
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer' + accessToken,
+            'Content-Type': 'audio/wav;codec=audio/pcm; samplerate=16000',
+            'Ocp-Apim-Subscription-Key': 'd540f77acd43487ea1cda63823d67cc9'
+        },    
+        method: 'POST'
+    }).then((res) => {
+        return res.json()
+    }).then((res: any) => {
+        console.log(res)
+        const textBox = document.getElementById("search-input") as HTMLInputElement
+        textBox.value = (res.DisplayText as string).slice(0, -1)
+    }).catch((error) => {
+        console.log("Error", error)
+    });
+
+    }
 }
 
 export default App;
