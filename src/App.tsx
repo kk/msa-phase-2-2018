@@ -1,4 +1,6 @@
 // import Button from '@material-ui/core/Button';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import ButtonBase from '@material-ui/core/ButtonBase';
 
@@ -8,10 +10,12 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import List from '@material-ui/core/List';
 
 import ListItem from '@material-ui/core/ListItem';
+import TextField from '@material-ui/core/TextField';
 
 import ListItemText from '@material-ui/core/ListItemText';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import SearchIcon from '@material-ui/icons/Search';
 import * as React from 'react';
 
 import Modal from 'react-responsive-modal';
@@ -67,6 +71,7 @@ class App extends React.Component<{}, IState> {
 		this.getBase64 = this.getBase64.bind(this)
 		this.deleteAudio = this.deleteAudio.bind(this)
 		this.editAudio = this.editAudio.bind(this)
+		this.filterSearchList = this.filterSearchList.bind(this)
 
 	}
 
@@ -94,20 +99,19 @@ class App extends React.Component<{}, IState> {
 		const { open, editOpen } = this.state;
 		return (
 		<div>
-			<div className="header-wrapper">
-			Audiocat 🐱
-			<div className="container header" style={{marginRight:"50%"}}>
-					{/*<div className="btn btn-primary btn-action btn-add" onClick={this.changeAudio}>Title change</div>*/}
-					{/*<div className="btn btn-primary btn-action btn-add" onClick={this.printAudio}>print title</div>*/}
+			     <AppBar position="static" color="default">
+        <Toolbar>
+          <Typography variant="h6" color="inherit">
+            Audiocat
+          </Typography>
+		  <TextField id="search-input" placeholder="Search" style={{paddingLeft: "60%"}}/>							
+				<Button variant="contained" color="primary" onClick={this.filterSearchList} style={{position:"relative", left:"0", bottom:"0"}}>
+					<SearchIcon />
+				</Button>
+		  <div className="btn btn-primary btn-action btn-add" onClick={this.onOpenModal}>Add Audio</div>
 
-				</div>
-				
-				<div className="container header">
-					<div className="btn btn-primary btn-action btn-add" onClick={this.onOpenModal}>Add Audio</div>
-					{/*<div className="btn btn-primary btn-action btn-add" onClick={this.printAudio}>print title</div>*/}
-
-				</div>
-			</div>
+        </Toolbar>
+      </AppBar>
 			{/*
 			<div className="container">
 				<div className="row">
@@ -296,6 +300,28 @@ class App extends React.Component<{}, IState> {
 			console.log(this.state.audioList)	
 		})
 	}
+
+	private filterSearchList() {
+		const searchQueryObj = document.getElementById("search-input") as HTMLInputElement
+		const searchQuery = searchQueryObj.value
+		if (searchQuery === ""){
+			this.getAudioList()
+			return
+		}
+		console.log("searchQuery is: " + searchQuery)
+		const url = "https://audiocatapi2g.azurewebsites.net/api/Audio/searchQuery"
+		fetch(url + "?=" + searchQuery).then(d => d.json())
+		.then(d => {
+			console.log("output d is: " + d)
+			// d.title = "ayy lmao"
+			this.setState({
+				audioList: d
+			})
+			console.log("current list is:")
+			console.log(this.state.audioList)	
+		})
+	}
+
 	private changeAudio() {
 		fetch("http://audiocatapi2g.azurewebsites.net/api/audio/1").then(d => d.json())
 		.then(d => {
