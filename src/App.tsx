@@ -27,16 +27,11 @@ import MediaStreamRecorder from 'msr';
 
 import './App.css';
 
-// import MemeDetail from './components/MemeDetail';
-// import MemeList from './components/MemeList';
-
 interface IState {
 	audio: any,
 	audioList: any,
 	audioListGen: boolean,
-	currentMeme: any,
 	editOpen: boolean,
-	memes: any[],
 	open: boolean,
 	uploadFileList: any,
 	uploadedBase64: any,
@@ -52,18 +47,13 @@ class App extends React.Component<{}, IState> {
 			, "id":-1, "tag":"Loading tags", "timestamp":"", "title":"Loading title"},
 			audioList: ["blank"],
 			audioListGen: true,
-			currentMeme: {"id":0, "title":"Loading ","url":"","tags":"⚆ _ ⚆","uploaded":"","width":"0","height":"0"},
 			editOpen: false,
-			memes: [],
 			open: false,
 			uploadFileList: null,
 			uploadedBase64: "default"
 		}     	
 
 		this.changeAudio = this.changeAudio.bind(this)
-		this.selectNewMeme = this.selectNewMeme.bind(this)
-		this.fetchMemes = this.fetchMemes.bind(this)
-		this.fetchMemes("")	
 		this.handleFileUpload = this.handleFileUpload.bind(this)
 		this.uploadAudio = this.uploadAudio.bind(this)
 		this.getAudioList = this.getAudioList.bind(this)
@@ -113,18 +103,7 @@ class App extends React.Component<{}, IState> {
         </Toolbar>
       </AppBar>
 	  </div>
-			{/*
-			<div className="container">
-				<div className="row">
-					<div className="col-7">
-						<MemeDetail currentMeme={this.state.currentMeme} />
-					</div>
-					<div className="col-5">
-						<MemeList memes={this.state.memes} selectNewMeme={this.selectNewMeme} searchByTag={this.fetchMemes}/>
-					</div>
-				</div>
-			</div>
-			*/}
+
 			
 				<Modal open={editOpen} onClose={this.onEditCloseModal}>
 				<form>
@@ -215,7 +194,7 @@ class App extends React.Component<{}, IState> {
 		</Typography>
 			</div>
 			<video id={"player"} autoPlay={true} muted={true} loop={true} style={{width: "100%", height: "auto"}}>
-			<source src="./keyboardcat.mp4" type="video/mp4"/>
+			<source src="https://eric.co.nz/assets/video/keyboardcat.mp4" type="video/mp4"/>
 		</video>
 		</div>
 	</div>
@@ -332,13 +311,6 @@ class App extends React.Component<{}, IState> {
 	private onEditCloseModal = () => {
 		this.setState({ editOpen: false });
 	};
-	
-	// Change selected meme
-	private selectNewMeme(newMeme: any) {
-		this.setState({
-			currentMeme: newMeme
-		})
-	}
 
 	private getAudioList() {
 		fetch("https://audiocatapi2g.azurewebsites.net/api/Audio").then(d => d.json())
@@ -463,46 +435,12 @@ class App extends React.Component<{}, IState> {
 		})
 
 		}
-	
-	
-
-	private fetchMemes(tag: any) {
-		let url = "http://phase2apitest.azurewebsites.net/api/meme"
-		if (tag !== "") {
-			url += "/tag?=" + tag
-		}
-		fetch(url, {
-			method: 'GET'
-		})
-		.then(res => res.json())
-		.then(json => {
-			let currentMeme = json[0]
-			if (currentMeme === undefined) {
-				currentMeme = {"id":0, "title":"No memes (╯°□°）╯︵ ┻━┻","url":"","tags":"try a different tag","uploaded":"","width":"0","height":"0"}
-			}
-			this.setState({
-				currentMeme,
-				memes: json
-			})
-		});
-	}
 
 	private handleFileUpload(fileList: any) {
 		this.setState({
 			uploadFileList: fileList.target.files
 		})
 	}
-/*
-	private getBase64(file: any) {
-    const reader:FileReader = new FileReader();
-    reader.onload = (readerEvt: any) => {
-      const binaryString = readerEvt.target.result;
-      let base64Url = binaryString;
-			base64Url = base64Url.substring(base64Url.lastIndexOf("base64") + 7);
-			return base64Url
-	}
-	
-	*/
 	
 	 private getBase64Edit() {
 		const file = this.state.uploadFileList[0]
