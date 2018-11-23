@@ -194,7 +194,7 @@ class App extends React.Component<{}, IState> {
 		</Typography>
 			</div>
 			<video id={"player"} autoPlay={true} muted={true} loop={true} style={{width: "100%", height: "auto"}}>
-			<source src="https://eric.co.nz/assets/video/keyboardcat.mp4" type="video/mp4"/>
+			<source src="https://eric.co.nz/assets/video/keyboardcatcolour.mp4" type="video/mp4"/>
 		</video>
 		</div>
 	</div>
