@@ -44,7 +44,7 @@ class App extends React.Component<{}, IState> {
         super(props)
         this.state = {
 			audio: { "author": "blank", "file": "UklGRhwMAABXQVZFZm10IBAAAAABAAEAgD4AAIA+AAABAAgAZGF0Ya4LAACAgICAgICAgICAgICAgICAgICAgICAgICAf3hxeH+AfXZ1eHx6dnR5fYGFgoOKi42aloubq6GOjI2Op7ythXJ0eYF5aV1AOFFib32HmZSHhpCalIiYi4SRkZaLfnhxaWptb21qaWBea2BRYmZTVmFgWFNXVVVhaGdbYGhZbXh1gXZ1goeIlot1k6yxtKaOkaWhq7KonKCZoaCjoKWuqqmurK6ztrO7tbTAvru/vb68vbW6vLGqsLOfm5yal5KKhoyBeHt2dXBnbmljVlJWUEBBPDw9Mi4zKRwhIBYaGRQcHBURGB0XFxwhGxocJSstMjg6PTc6PUxVV1lWV2JqaXN0coCHhIyPjpOenqWppK6xu72yxMu9us7Pw83Wy9nY29ve6OPr6uvs6ezu6ejk6erm3uPj3dbT1sjBzdDFuMHAt7m1r7W6qaCupJOTkpWPgHqAd3JrbGlnY1peX1hTUk9PTFRKR0RFQkRBRUVEQkdBPjs9Pzo6NT04Njs+PTxAPzo/Ojk6PEA5PUJAQD04PkRCREZLUk1KT1BRUVdXU1VRV1tZV1xgXltcXF9hXl9eY2VmZmlna3J0b3F3eHyBfX+JgIWJiouTlZCTmpybnqSgnqyrqrO3srK2uL2/u7jAwMLFxsfEv8XLzcrIy83JzcrP0s3M0dTP0drY1dPR1dzc19za19XX2dnU1NjU0dXPzdHQy8rMysfGxMLBvLu3ta+sraeioJ2YlI+MioeFfX55cnJsaWVjXVlbVE5RTktHRUVAPDw3NC8uLyknKSIiJiUdHiEeGx4eHRwZHB8cHiAfHh8eHSEhISMoJyMnKisrLCszNy8yOTg9QEJFRUVITVFOTlJVWltaXmNfX2ZqZ21xb3R3eHqAhoeJkZKTlZmhpJ6kqKeur6yxtLW1trW4t6+us7axrbK2tLa6ury7u7u9u7vCwb+/vr7Ev7y9v8G8vby6vru4uLq+tri8ubi5t7W4uLW5uLKxs7G0tLGwt7Wvs7avr7O0tLW4trS4uLO1trW1trm1tLm0r7Kyr66wramsqaKlp52bmpeWl5KQkImEhIB8fXh3eHJrbW5mYGNcWFhUUE1LRENDQUI9ODcxLy8vMCsqLCgoKCgpKScoKCYoKygpKyssLi0sLi0uMDIwMTIuLzQ0Njg4Njc8ODlBQ0A/RUdGSU5RUVFUV1pdXWFjZGdpbG1vcXJ2eXh6fICAgIWIio2OkJGSlJWanJqbnZ2cn6Kkp6enq62srbCysrO1uLy4uL+/vL7CwMHAvb/Cvbq9vLm5uba2t7Sysq+urqyqqaalpqShoJ+enZuamZqXlZWTkpGSkpCNjpCMioqLioiHhoeGhYSGg4GDhoKDg4GBg4GBgoGBgoOChISChISChIWDg4WEgoSEgYODgYGCgYGAgICAgX99f398fX18e3p6e3t7enp7fHx4e3x6e3x7fHx9fX59fn1+fX19fH19fnx9fn19fX18fHx7fHx6fH18fXx8fHx7fH1+fXx+f319fn19fn1+gH9+f4B/fn+AgICAgH+AgICAgIGAgICAgH9+f4B+f35+fn58e3t8e3p5eXh4d3Z1dHRzcXBvb21sbmxqaWhlZmVjYmFfX2BfXV1cXFxaWVlaWVlYV1hYV1hYWVhZWFlaWllbXFpbXV5fX15fYWJhYmNiYWJhYWJjZGVmZ2hqbG1ub3Fxc3V3dnd6e3t8e3x+f3+AgICAgoGBgoKDhISFh4aHiYqKi4uMjYyOj4+QkZKUlZWXmJmbm52enqCioqSlpqeoqaqrrK2ur7CxsrGys7O0tbW2tba3t7i3uLe4t7a3t7i3tre2tba1tLSzsrKysbCvrq2sq6qop6alo6OioJ+dnJqZmJeWlJKSkI+OjoyLioiIh4WEg4GBgH9+fXt6eXh3d3V0c3JxcG9ubWxsamppaWhnZmVlZGRjYmNiYWBhYGBfYF9fXl5fXl1dXVxdXF1dXF1cXF1cXF1dXV5dXV5fXl9eX19gYGFgYWJhYmFiY2NiY2RjZGNkZWRlZGVmZmVmZmVmZ2dmZ2hnaGhnaGloZ2hpaWhpamlqaWpqa2pra2xtbGxtbm1ubm5vcG9wcXBxcnFycnN0c3N0dXV2d3d4eHh5ent6e3x9fn5/f4CAgIGCg4SEhYaGh4iIiYqLi4uMjY2Oj5CQkZGSk5OUlJWWlpeYl5iZmZqbm5ybnJ2cnZ6en56fn6ChoKChoqGio6KjpKOko6SjpKWkpaSkpKSlpKWkpaSlpKSlpKOkpKOko6KioaKhoaCfoJ+enp2dnJybmpmZmJeXlpWUk5STkZGQj4+OjYyLioqJh4eGhYSEgoKBgIB/fn59fHt7enl5eHd3dnZ1dHRzc3JycXBxcG9vbm5tbWxrbGxraWppaWhpaGdnZ2dmZ2ZlZmVmZWRlZGVkY2RjZGNkZGRkZGRkZGRkZGRjZGRkY2RjZGNkZWRlZGVmZWZmZ2ZnZ2doaWhpaWpra2xsbW5tbm9ub29wcXFycnNzdHV1dXZ2d3d4eXl6enp7fHx9fX5+f4CAgIGAgYGCgoOEhISFhoWGhoeIh4iJiImKiYqLiouLjI2MjI2OjY6Pj46PkI+QkZCRkJGQkZGSkZKRkpGSkZGRkZKRkpKRkpGSkZKRkpGSkZKRkpGSkZCRkZCRkI+Qj5CPkI+Pjo+OjY6Njo2MjYyLjIuMi4qLioqJiomJiImIh4iHh4aHhoaFhoWFhIWEg4SDg4KDgoKBgoGAgYCBgICAgICAf4CAf39+f35/fn1+fX59fHx9fH18e3x7fHt6e3p7ent6e3p5enl6enl6eXp5eXl4eXh5eHl4eXh5eHl4eXh5eHh3eHh4d3h4d3h3d3h4d3l4eHd4d3h3eHd4d3h3eHh4eXh5eHl4eHl4eXh5enl6eXp5enl6eXp5ent6ent6e3x7fHx9fH18fX19fn1+fX5/fn9+f4B/gH+Af4CAgICAgIGAgYCBgoGCgYKCgoKDgoOEg4OEg4SFhIWEhYSFhoWGhYaHhoeHhoeGh4iHiIiHiImIiImKiYqJiYqJiouKi4qLiouKi4qLiouKi4qLiouKi4qLi4qLiouKi4qLiomJiomIiYiJiImIh4iIh4iHhoeGhYWGhYaFhIWEg4OEg4KDgoOCgYKBgIGAgICAgH+Af39+f359fn18fX19fHx8e3t6e3p7enl6eXp5enl6enl5eXh5eHh5eHl4eXh5eHl4eHd5eHd3eHl4d3h3eHd4d3h3eHh4d3h4d3h3d3h5eHl4eXh5eHl5eXp5enl6eXp7ent6e3p7e3t7fHt8e3x8fHx9fH1+fX59fn9+f35/gH+AgICAgICAgYGAgYKBgoGCgoKDgoOEg4SEhIWFhIWFhoWGhYaGhoaHhoeGh4aHhoeIh4iHiIeHiIeIh4iHiIeIiIiHiIeIh4iHiIiHiIeIh4iHiIeIh4eIh4eIh4aHh4aHhoeGh4aHhoWGhYaFhoWFhIWEhYSFhIWEhISDhIOEg4OCg4OCg4KDgYKCgYKCgYCBgIGAgYCBgICAgICAgICAf4B/f4B/gH+Af35/fn9+f35/fn1+fn19fn1+fX59fn19fX19fH18fXx9fH18fXx9fH18fXx8fHt8e3x7fHt8e3x7fHt8e3x7fHt8e3x7fHt8e3x7fHt8e3x8e3x7fHt8e3x7fHx8fXx9fH18fX5+fX59fn9+f35+f35/gH+Af4B/gICAgICAgICAgICAgYCBgIGAgIGAgYGBgoGCgYKBgoGCgYKBgoGCgoKDgoOCg4KDgoOCg4KDgoOCg4KDgoOCg4KDgoOCg4KDgoOCg4KDgoOCg4KDgoOCg4KDgoOCg4KDgoOCg4KCgoGCgYKBgoGCgYKBgoGCgYKBgoGCgYKBgoGCgYKBgoGCgYKBgoGCgYKBgoGBgYCBgIGAgYCBgIGAgYCBgIGAgYCBgIGAgYCBgIGAgYCAgICBgIGAgYCBgIGAgYCBgIGAgYCBgExJU1RCAAAASU5GT0lDUkQMAAAAMjAwOC0wOS0yMQAASUVORwMAAAAgAAABSVNGVBYAAABTb255IFNvdW5kIEZvcmdlIDguMAAA"
-			, "id":-1, "tag":"Loading tags", "timestamp":"", "title":"Loading title"},
+			, "id":-1, "tag":"No tags", "timestamp":"", "title":"Select a song"},
 			audioList: ["blank"],
 			audioListGen: true,
 			editOpen: false,
@@ -68,20 +68,6 @@ class App extends React.Component<{}, IState> {
 	}
 
 	public render() {
-		/*
-		if (this.state.audio === "") {
-			this.defaultAudio();
-		}*/
-		console.log("title is: " + this.state.audio.title)
-		console.log("tag is: " + this.state.audio.tag)
-		console.log("file is: " + this.state.audio.file)
-		console.log("second time file is: " + this.state.audio.file)
-		/*
-		if (this.state.audioList === ["blank"]) {
-			console.log("i am runnin da function")
-			this.getAudioList()
-		}
-		*/
 		if (this.state.audioListGen === true) {
 			this.getAudioList()
 			this.setState({
@@ -97,9 +83,6 @@ class App extends React.Component<{}, IState> {
           <Typography variant="h6" color="inherit">
 			<img src="/audiocat-logo.png" alt="Audiocat Logo" width="100px" height="100px"/>
           </Typography>
-
-		  <div className="btn btn-primary btn-action btn-add" onClick={this.onOpenModal}>Add Audio</div>
-
         </Toolbar>
       </AppBar>
 	  </div>
@@ -182,16 +165,21 @@ class App extends React.Component<{}, IState> {
 			<b>Audiocat</b>
 		</Typography>
 		<Typography component="h3" variant="h2" gutterBottom={true} style={{fontFamily: 'Raleway', color:" #ffffff", fontSize: "1em"}}>
-			The free audio sharing website
+			The free audio sharing website<br/><br/>
+	  		<div style={{textAlign: "center"}}>
+			<i className="fa fa-angle-double-down" style={{textAlign: "center"}}/>
+			</div>
 		</Typography>
 		<br/>
+		{/*
 		<Typography component="h3" variant="h2" gutterBottom={true} style={{ color:" #ffffff", fontFamily: 'Helvetica', fontSize: "0.7em",
-		/*paddingLeft: "37%"*/ textAlign: "center"}}>
+		textAlign: "center"}}>
 		<div style={{color: "#ffa500"}}>
 			Get started! <br/>
 			<i className="fa fa-angle-double-down" style={{textAlign: "center"}}/>
 		</div>
 		</Typography>
+		*/}
 			</div>
 			<video id={"player"} autoPlay={true} muted={true} loop={true} style={{width: "100%", height: "auto"}}>
 			<source src="https://eric.co.nz/assets/video/keyboardcatcolour.mp4" type="video/mp4"/>
@@ -201,14 +189,14 @@ class App extends React.Component<{}, IState> {
 		<Grid item={true} xs={12} style={{paddingTop:"10%"}}>
           <Grid container={true} className={"columns"} justify="center" spacing={8}>
             {[0].map(value => (
-              <Grid key={value} item={true}>
+              <Grid key={value} item={true} style={{paddingBottom: "5%"}}>
 
 
 
 			<Paper className={"root"}>
 			<Grid container={true} spacing={16}>
-			  <Grid item={true}>
-				<ButtonBase className={"audio"} id="audio-player" /*style={{paddingTop:"50px"}}*/>
+			  <Grid item={true} style={{marginTop: "5%"}}>
+				<ButtonBase className={"audio"} id="audio-player" style={{justifyContent: "center", display: "flex", alignItems: "center"}}>
 				<audio controls={true} src={"data:audio/wav;base64," + this.state.audio.file }/*style={{paddingTop:"10%"}}*/>
 							{/* <source src="http://puu.sh/C4d9s/5634f362c7.wav" type="audio/wav"/> */}
 							{/*<source src={"data:audio/wav;base64," + this.state.audio.file} type="audio/wav"/>*/}
@@ -220,21 +208,21 @@ class App extends React.Component<{}, IState> {
 			  <Grid item={true} xs={12} sm={true} container={true}>
 				<Grid item={true} xs={true} container={true} direction="column" spacing={16}>
 				  <Grid item={true} xs={true}>
-					<Typography gutterBottom={true} variant="subtitle1">
+					<Typography gutterBottom={true} variant="subtitle1" style={{textAlign: "center"}}>
 					<b>
 						{this.state.audio.title + "🎵"} 
 					</b>
 					</Typography>
-					<Typography gutterBottom={true}>
+					<Typography gutterBottom={true} style={{textAlign: "center"}}>
 						{this.state.audio.tag}
 					</Typography>
-					<Typography color="textSecondary">ID: {this.state.audio.id}</Typography>
+					<Typography color="textSecondary" style={{textAlign: "center"}}>ID: {this.state.audio.id}</Typography>
 				  </Grid>
 				  <Grid item={true}>
-					<Typography style={{ cursor: 'pointer' }}>Author: {this.state.audio.author}</Typography>
+					<Typography style={{ cursor: 'pointer', textAlign: "center" }} >Author: {this.state.audio.author}</Typography>
 				  </Grid>
 					<Grid item={true}>
-					<ButtonBase className={"audio"}>
+					<ButtonBase className={"audio"} >
 						<Button variant="contained" color="secondary" onClick={this.deleteAudio} style={{position:"relative", left:"0", bottom:"0"}}>
 						<DeleteIcon />
 						</Button>
@@ -245,20 +233,9 @@ class App extends React.Component<{}, IState> {
 						<br/>
 						<br/>
 
-			<div id="searchBar">
-			<TextField id="search-input" placeholder="Search"/>							
-				<Button variant="contained" color="primary" onClick={this.filterSearchList} style={{position:"relative", left:"0", bottom:"0"}}>
-				<SearchIcon />
-			</Button>
-			<div className="btn" onClick={this.searchQueryByVoice} ><i className="fa fa-microphone" /></div>
-		</div>
 					</Grid>
 				</Grid>
-				{/*
-				<Grid item={true}>
-				  <Typography variant="subtitle1">$19.00</Typography>
-				</Grid>
-				*/}
+
 			  </Grid>
 			</Grid>
 		  </Paper>
@@ -268,18 +245,29 @@ class App extends React.Component<{}, IState> {
             ))}
             {[1].map(value => (
               <Grid key={value} item={true}>
-                <Paper className={"audioList"} >
-								<List>
-									{this.createTable()}
-{/*
-									<ListItem style={{ cursor: 'pointer' }}>
-										<ListItemText primary={this.state.audioList.length} secondary="Jan 9, 2014" />
-									</ListItem>
+                <Paper className={"audioList"} style={{paddingTop: "10px"}} >
+				<List>
+				<div id="searchBar" style={{paddingLeft: "5%"}}>
+				
+				<TextField id="search-input" placeholder="Search"/>		
+				&nbsp;&nbsp;
+					
+				<Button variant="contained" color="primary" onClick={this.filterSearchList} style={{position:"relative", left:"0", bottom:"0"}}>
+				<SearchIcon />
+			</Button>
+			<div className="btn" onClick={this.searchQueryByVoice} ><i className="fa fa-microphone" /></div>
+			</div>
+			<br/>
+		
 
-									<ListItem style={{ cursor: 'pointer' }} >
-										<ListItemText primary={this.state.audioList.length} secondary="Jan 9, 2014" />
-									</ListItem>
-*/}
+									<div style={{textAlign: "left"}}>
+									<div className="btn btn-primary btn-action btn-add" onClick={this.onOpenModal}>Add Audio</div>
+
+									<b> <div style={{marginLeft: "5%"}}>Audio List: </div></b> 				
+
+									</div>
+									<hr/>
+									{this.createTable()}
 								</List>
 								</Paper>
 								
@@ -320,7 +308,6 @@ class App extends React.Component<{}, IState> {
 			this.setState({
 				audioList: d
 			})
-			console.log(this.state.audioList)	
 		})
 	}
 
@@ -331,17 +318,13 @@ class App extends React.Component<{}, IState> {
 			this.getAudioList()
 			return
 		}
-		console.log("searchQuery is: " + searchQuery)
 		const url = "https://audiocatapi2g.azurewebsites.net/api/Audio/searchQuery"
 		fetch(url + "?=" + searchQuery).then(d => d.json())
 		.then(d => {
-			console.log("output d is: " + d)
 			// d.title = "ayy lmao"
 			this.setState({
 				audioList: d
 			})
-			console.log("current list is:")
-			console.log(this.state.audioList)	
 		})
 	}
 
@@ -353,7 +336,6 @@ class App extends React.Component<{}, IState> {
 			this.setState({
 				audio: d
 			})
-			console.log(this.state.audio)
 			
 		})
 	}
@@ -382,7 +364,6 @@ class App extends React.Component<{}, IState> {
 		// const authorInput = document.getElementById("author-input") as HTMLInputElement
 		// const fileInput = document.getElementById("audio-file-input").files[0] as HTMLInputElement
 		const utc = new Date().toJSON().slice(0,10).replace(/-/g,'/');
-		console.log("from editAudio, base64 is: " + this.state.uploadedBase64.split(',')[1])
 		// const audioFile = this.state.uploadFileList[0]
 		let title = ""
 		let tag = ""
@@ -407,7 +388,6 @@ class App extends React.Component<{}, IState> {
 		 }
 		 
 		 const type = this.state.uploadFileList[0].type.substring(0,5)
-		 console.log("type is: " + type)
 		 if (type === "audio"){
 			 console.log("hey this is a valid audio file!")
 		 }
@@ -417,8 +397,6 @@ class App extends React.Component<{}, IState> {
 		 }
 		 
 		const formData = {"id": this.state.audio.id, "title":  title , "tag": tag, "timestamp": utc.toString(), "file": this.state.uploadedBase64.split(',')[1], "author": author }
-		console.log("title is: " + title)
-    	console.log("the id isww: " + this.state.audio.id)
 		const url = "https://audiocatapi2g.azurewebsites.net/api/audio/" + this.state.audio.id
 		fetch(url, {
 			body: JSON.stringify(formData),
@@ -443,12 +421,15 @@ class App extends React.Component<{}, IState> {
 	}
 	
 	 private getBase64Edit() {
+		if (this.state.uploadFileList === null) {
+			alert("Please enter a file")
+			return
+		}
 		const file = this.state.uploadFileList[0]
 		const fileReader: FileReader = new FileReader();
 		
 		fileReader.addEventListener("load", (e) => {
 			this.setState({ uploadedBase64: fileReader.result });
-			console.log("from getbase64 function, base64 is: " + fileReader.result)
 			{this.editAudio()}
 			// console.log(this.state.uploadedBase64)
 			// return this.state.uploadedBase64
@@ -458,12 +439,15 @@ class App extends React.Component<{}, IState> {
 }
 
 private getBase64Upload() {
+	if (this.state.uploadFileList === null) {
+		alert("Please enter a file")
+		return
+	}
 	const file = this.state.uploadFileList[0]
 	const fileReader: FileReader = new FileReader();
 	
 	fileReader.addEventListener("load", (e) => {
 		this.setState({ uploadedBase64: fileReader.result });
-		console.log("from getbase64 function, base64 is: " + fileReader.result)
 		{this.uploadAudio()}
 		// console.log(this.state.uploadedBase64)
 		// return this.state.uploadedBase64
@@ -471,38 +455,6 @@ private getBase64Upload() {
 
  fileReader.readAsDataURL(file);
 }
-	 // console.log(this.state.uploadedBase64.split(',')[1])
-	 /*
-   console.log(fileReader.readAsDataURL(file))
-	 console.log(this.state.uploadedBase64.split(',')[1])
-	 return (this.state.uploadedBase64.split(',')[1]) 
-*/
-/*
-	private getBase64(file: any) {
-		const reader = new FileReader();
-    reader.readAsBinaryString(file);
-
-		reader.onload = (e) => {
-			const csv: string = (reader.result) as string;
-			console.log("getbase64 from function is: ")
-			console.log(csv)
-      		return csv
-		}
-    reader.onerror = (e) => {
-        alert("An error has occured with uploading")
-    };
-	}
-*/
-/*
-  private getBase64(file: any) {
-		const reader = new FileReader();
-		reader.onloadend = (e) => {
-			this.setState({ uploadedBase64: reader.result });
-		}
-	 console.log(reader.readAsDataURL(file))
-*/
-	 // console.log(this.state.uploadedBase64.split(',')[1])
-	// return (this.state.uploadedBase64.split(',')[1]) 
 
 		
 	
@@ -515,7 +467,6 @@ private getBase64Upload() {
 		// const fileInput = document.getElementById("audio-file-input").files[0] as HTMLInputElement
 		const utc = new Date().toJSON().slice(0,10).replace(/-/g,'/');
 		// const audioFile = this.state.uploadFileList[0]
-			console.log(this.state.uploadFileList[0].type)
 		 if (titleInput === null || tagInput === null || authorInput === null) {
 			alert("Please fill out the fields")
 		 	return;
@@ -529,15 +480,7 @@ private getBase64Upload() {
 		const title = titleInput.value
 		const tag = tagInput.value
 		const author = authorInput.value
-		/*
-		console.log("title is: " + title)
-		console.log("tag is: " + tag)
-		console.log("date is: " + utc)
-		console.log("file is: " + this.state.uploadFileList[0].name)
-		console.log("file type is: " + this.state.uploadFileList[0].type)
-		console.log("modified date is: " + this.state.uploadFileList[0].lastModifiedDate)
-		*/
-		// let base64 = ""
+
 		const type = this.state.uploadFileList[0].type.substring(0,5)
 		console.log("type is: " + type)
 		if (type === "audio"){
@@ -547,23 +490,9 @@ private getBase64Upload() {
 			alert("Please enter a valid audio file eg .wav")
 			return
 		}
-		/*
-		const formData = new FormData()
-		formData.append("title", title.toString())
-		formData.append("tag", tag.toString())
-		formData.append("timestamp", utc.toString())
-		*/
-	 	// formData.append("timestamp", utc.toString())
-		// console.log("form data is:")
-		// console.log(formData)
-		
-		// const formData = '{"title": ' + title.toString() + ', "tag": ' + tag.toString() + ', "timestamp": ' + utc.toString() + '}'
 		const formData = {"title":  title , "tag": tag, "timestamp": utc.toString(), "file": this.state.uploadedBase64.split(',')[1], "author": author}
 		// JSON.stringify(formData)
-		console.log("title is: " + title)
-		// const formData = '{"title": "js bois", "tag": "ok", "timestamp": "idk u"}'
 
-		// const formData = '{"title": ' + title.toString + ', "tag": "ok", "timestamp": "idk u"}'
 		const url = "https://audiocatapi2g.azurewebsites.net/api/audio"
 		fetch(url, {
 			body: JSON.stringify(formData),
@@ -583,7 +512,6 @@ private getBase64Upload() {
 
 		private createTable() {
 			const table:any[] = []
-			console.log(this.state.audioList.length)
 			for (let i = 0; i < this.state.audioList.length; i++) {
 					const children = []
 					const audio = this.state.audioList[i]
@@ -594,7 +522,7 @@ private getBase64Upload() {
 					// table.push(<tr key={i+""} id={i+""} onClick= {this.selectRow.bind(this, i)}>{children}</tr>)
 					// table.push(<ListItem onClick={e => { console.log(audio) }}><tr key={i+""} id={i+""}><ListItemText primary={audio.title} secondary={audio.tag} /></tr></ListItem>)
 					table.push(<ListItem onClick={e => {this.setState({audio: (currentAudio)}) 
-				}}><tr key={i+""} id={i+""}><ListItemText primary={audio.title} secondary={audio.tag }  /></tr></ListItem>)
+				}}><tr key={i+""} id={i+""} style={{cursor: 'pointer'}}><ListItemText primary={audio.title} secondary={audio.tag }  /></tr></ListItem>)
 					
 					/*
 					<ListItem >
